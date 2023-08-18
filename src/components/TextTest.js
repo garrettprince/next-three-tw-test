@@ -4,7 +4,7 @@ import { motion } from "framer-motion-3d";
 
 function TextTest({ textContent, position, scale }) {
   return (
-    <Text anchorX={0} color={"black"} position={position} scale={scale} font>
+    <Text animations={[]} anchorX={0} color={"black"} position={position} scale={scale} font>
       {textContent}
     </Text>
   );

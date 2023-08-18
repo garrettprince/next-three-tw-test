@@ -1,6 +1,4 @@
 import Head from "next/head";
-import Box from "../components/Box";
-import { Canvas } from "@react-three/fiber";
 import { motion } from "framer-motion-3d";
 import Scene from "../components/Scene";
 
@@ -14,6 +12,8 @@ export default function Home() {
       </Head>
 
       <Scene />
+
+      
     </div>
   );
 }

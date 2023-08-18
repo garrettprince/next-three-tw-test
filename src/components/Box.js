@@ -1,47 +1,32 @@
 import React, { useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { motion } from "framer-motion-3d";
-import { transition1 } from "../utils/transitions";
-import { usePlayDateIconInfo } from "../utils/store";
+import { useFrame } from "@react-three/fiber";
+import { useSpring, animated } from "@react-spring/three";
 
-function Box({}) {
-  const location = usePlayDateIconInfo((state) => state.location);
-  const setLocation = usePlayDateIconInfo((state) => state.setLocation);
-  const size = usePlayDateIconInfo((state) => state.size);
-  const setSize = usePlayDateIconInfo((state) => state.setSize);
+function Box({ active, setActive }) {
+  // React Spring objects
+  const { scale, color1, position } = useSpring({
+    color1: active ? "blue" : "red",
+    scale: active ? 1 : 0.9,
+    position: active ? [0, 0, 0] : [1, 1, 1],
+  });
 
   // This reference will give us direct access to the mesh
   const meshRef = useRef();
 
   // Subscribe this component to the render-loop, rotate the mesh every frame
-  //   useFrame((state, delta) => (meshRef.current.rotation.x += delta));
-  // Return view, these are regular three.js elements expressed in JSX
-  //   const variants = {
-  //     hidden: { x: 1 },
-  //     visible: { opacity: 1 },
-  //   };
+  useFrame((state, delta) => (meshRef.current.rotation.y += delta));
 
   return (
     // Change position in mesh, size in boxGeometry
-    <motion.mesh
+    <animated.mesh
+      scale={scale}
+      onClick={() => setActive(!active)}
       ref={meshRef}
-      position={location}
-      onClick={() =>
-        location ? setLocation([0, -2, 1]) : setLocation([0, 0, 0])
-      }
-      transition={{ ...transition1 }}
+      position={position}
     >
-      {/* Need to use movement to change size, not actual args */}
-      <motion.boxGeometry args={size} />
-      <motion.meshStandardMaterial
-        color={"blue"}
-        // initial="hidden"
-        // initial={[0, 0, 0]}
-        // animate={[1, 1, 1]}
-        // transition={transition1}
-        // variants={variants}
-      />
-    </motion.mesh>
+      <animated.boxGeometry />
+      <animated.meshStandardMaterial color={color1} />
+    </animated.mesh>
   );
 }
 
